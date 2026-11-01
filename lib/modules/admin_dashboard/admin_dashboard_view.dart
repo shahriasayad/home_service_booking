@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_sizes.dart';
 import '../../app/widgets/custom_appbar.dart';
 import 'admin_dashboard_controller.dart';
@@ -12,67 +13,111 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: "Admin Dashboard",
+        title: 'Admin Dashboard',
         showBackButton: false,
         actions: [
           IconButton(
+            tooltip: 'Logout',
             onPressed: controller.logout,
             icon: const Icon(Icons.logout),
           ),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSizes.md),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Obx(
-                  () => GridView.count(
+              () => GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
+                crossAxisSpacing: 14,
+                mainAxisSpacing: 14,
+                childAspectRatio: 1.25,
                 children: [
                   dashboardCard(
-                    "Workers",
-                    controller.totalWorkers.value.toString(),
+                    'Workers',
+                    controller.totalWorkers.toString(),
                     Icons.engineering,
+                    onTap: controller.goToManageWorkers,
                   ),
                   dashboardCard(
-                    "Customers",
-                    controller.totalCustomers.value.toString(),
+                    'Customers',
+                    controller.totalCustomers.toString(),
                     Icons.people,
+                    onTap: controller.openManageUsersSheet,
                   ),
                   dashboardCard(
-                    "Bookings",
-                    controller.totalBookings.value.toString(),
+                    'Bookings',
+                    controller.totalBookings.toString(),
                     Icons.calendar_month,
+                    onTap: controller.openMonitorActivitySheet,
                   ),
                   dashboardCard(
-                    "Categories",
-                    controller.totalCategories.value.toString(),
+                    'Categories',
+                    controller.totalCategories.toString(),
                     Icons.category,
+                    onTap: controller.goToManageCategories,
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 30),
-
-            ListTile(
-              leading: const Icon(Icons.engineering),
-              title: const Text("Manage Workers"),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: controller.goToManageWorkers,
+            const SizedBox(height: 24),
+            const Text(
+              'Administration Controls',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-
-            const Divider(),
-
-            ListTile(
-              leading: const Icon(Icons.category),
-              title: const Text("Manage Categories"),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: controller.goToManageCategories,
+            const SizedBox(height: 12),
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.people, color: AppColors.primary),
+                    title: const Text('Manage Users'),
+                    subtitle: const Text('View, suspend/activate or remove customer accounts'),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: controller.openManageUsersSheet,
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading:
+                        const Icon(Icons.engineering, color: AppColors.primary),
+                    title: const Text('Manage Workers'),
+                    subtitle: const Text('Approve, reject, search & manage service providers'),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: controller.goToManageWorkers,
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading:
+                        const Icon(Icons.category, color: AppColors.primary),
+                    title: const Text('Manage Service Categories'),
+                    subtitle: const Text('Add, edit or remove service categories'),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: controller.goToManageCategories,
+                  ),
+                  const Divider(height: 1),
+                  Obx(
+                    () => ListTile(
+                      leading: const Icon(
+                        Icons.analytics_outlined,
+                        color: AppColors.primary,
+                      ),
+                      title: const Text('Monitor Reviews & System Activity'),
+                      subtitle: Text(
+                        '${controller.totalReviews} Reviews • ${controller.totalBookings} Bookings • Payments',
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: controller.openMonitorActivitySheet,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -81,29 +126,38 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
   }
 
   Widget dashboardCard(
-      String title,
-      String count,
-      IconData icon,
-      ) {
-    return Card(
-      elevation: 2,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: 40,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            count,
-            style: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
+    String title,
+    String count,
+    IconData icon, {
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSizes.cardRadius),
+      child: Card(
+        elevation: AppSizes.cardElevation,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 34,
+              color: AppColors.primary,
             ),
-          ),
-          Text(title),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              count,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              title,
+              style: const TextStyle(color: AppColors.grey),
+            ),
+          ],
+        ),
       ),
     );
   }
