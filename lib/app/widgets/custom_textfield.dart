@@ -5,29 +5,17 @@ import '../theme/app_sizes.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
-
   final String hintText;
-
   final String? labelText;
-
   final IconData? prefixIcon;
-
   final Widget? suffixIcon;
-
   final bool obscureText;
-
   final bool readOnly;
-
   final bool enabled;
-
   final int maxLines;
-
   final TextInputType keyboardType;
-
   final VoidCallback? onTap;
-
   final void Function(String)? onChanged;
-
   final String? Function(String?)? validator;
 
   const CustomTextField({
@@ -49,6 +37,8 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextFormField(
       controller: controller,
       validator: validator,
@@ -62,54 +52,33 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
-
-        prefixIcon:
-        prefixIcon == null ? null : Icon(prefixIcon),
-
+        prefixIcon: prefixIcon == null ? null : Icon(prefixIcon),
         suffixIcon: suffixIcon,
-
         filled: true,
-        fillColor: Colors.white,
-
+        fillColor: theme.cardColor,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: 16,
+          vertical: 14,
         ),
-
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            AppSizes.textFieldRadius,
-          ),
-          borderSide: const BorderSide(
-            color: AppColors.border,
-          ),
+          borderRadius: BorderRadius.circular(AppSizes.textFieldRadius),
+          borderSide: BorderSide(color: theme.dividerColor),
         ),
-
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            AppSizes.textFieldRadius,
-          ),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
+          borderRadius: BorderRadius.circular(AppSizes.textFieldRadius),
+          borderSide: BorderSide(
+            color: theme.colorScheme.primary,
             width: 1.5,
           ),
         ),
-
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            AppSizes.textFieldRadius,
-          ),
-          borderSide: const BorderSide(
-            color: Colors.red,
-          ),
+          borderRadius: BorderRadius.circular(AppSizes.textFieldRadius),
+          borderSide: const BorderSide(color: AppColors.error),
         ),
-
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            AppSizes.textFieldRadius,
-          ),
+          borderRadius: BorderRadius.circular(AppSizes.textFieldRadius),
           borderSide: const BorderSide(
-            color: Colors.red,
+            color: AppColors.error,
             width: 1.5,
           ),
         ),

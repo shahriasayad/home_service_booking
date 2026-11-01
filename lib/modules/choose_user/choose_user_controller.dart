@@ -3,20 +3,20 @@ import 'package:get/get.dart';
 import '../../app/routes/app_routes.dart';
 
 class ChooseUserController extends GetxController {
-  /// Selected Role
-  final RxString selectedRole = ''.obs;
+  final RxString selectedRole = 'Customer'.obs;
 
-  /// Select Customer
   void selectCustomer() {
     selectedRole.value = 'Customer';
   }
 
-  /// Select Worker
   void selectWorker() {
     selectedRole.value = 'Worker';
   }
 
-  /// Continue Button
+  void selectAdmin() {
+    selectedRole.value = 'Admin';
+  }
+
   void continueNext() {
     if (selectedRole.value.isEmpty) {
       Get.snackbar(
@@ -36,7 +36,6 @@ class ChooseUserController extends GetxController {
     );
   }
 
-  /// Reset Selection (Optional)
   void clearSelection() {
     selectedRole.value = '';
   }
